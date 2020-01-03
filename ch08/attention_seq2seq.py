@@ -75,7 +75,9 @@ class AttentionDecoder:
         self.lstm.set_state(h)
 
         for _ in range(sample_size):
-            x = np.array([sample_id]).reshape((1, 1))
+
+            # 2020.01.03 ishida
+            x = np.array([sample_id], dtype=np.int).reshape((1, 1))
 
             out = self.embed.forward(x)
             dec_hs = self.lstm.forward(out)
