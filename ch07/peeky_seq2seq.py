@@ -65,7 +65,10 @@ class PeekyDecoder:
         H = h.shape[1]
         peeky_h = h.reshape(1, 1, H)
         for _ in range(sample_size):
-            x = np.array([char_id]).reshape((1, 1))
+
+            # 2020.01.03 ishida
+            #x = np.array([char_id]).reshape((1, 1))
+            x = np.array([char_id] , dtype=np.int).reshape((1, 1))
             out = self.embed.forward(x)
 
             out = np.concatenate((peeky_h, out), axis=2)

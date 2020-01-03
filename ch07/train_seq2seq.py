@@ -1,6 +1,11 @@
 # coding: utf-8
 import sys
 sys.path.append('..')
+
+# 2020.01.03 ishida
+from common import config
+from common.util import to_gpu
+
 import numpy as np
 import matplotlib.pyplot as plt
 from dataset import sequence
@@ -16,22 +21,31 @@ from peeky_seq2seq import PeekySeq2seq
 char_to_id, id_to_char = sequence.get_vocab()
 
 # Reverse input? =================================================
-is_reverse = False  # True
+#is_reverse = False  # True
+is_reverse = True
 if is_reverse:
     x_train, x_test = x_train[:, ::-1], x_test[:, ::-1]
 # ================================================================
+
+# 2020.01.03 ishida
+if config.GPU:
+    print("config.GPU:", config.GPU)
+    x_train = to_gpu(x_train)
+    t_train = to_gpu(t_train)
+    x_test = to_gpu(x_test[:300])
+    t_test = to_gpu(t_test[:300])
 
 # ハイパーパラメータの設定
 vocab_size = len(char_to_id)
 wordvec_size = 16
 hideen_size = 128
-batch_size = 128
+batch_size = 256
 max_epoch = 25
 max_grad = 5.0
 
 # Normal or Peeky? ==============================================
-model = Seq2seq(vocab_size, wordvec_size, hideen_size)
-# model = PeekySeq2seq(vocab_size, wordvec_size, hideen_size)
+#model = Seq2seq(vocab_size, wordvec_size, hideen_size)
+model = PeekySeq2seq(vocab_size, wordvec_size, hideen_size)
 # ================================================================
 optimizer = Adam()
 trainer = Trainer(model, optimizer)
