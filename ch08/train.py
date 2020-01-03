@@ -28,16 +28,19 @@ x_train, x_test = x_train[:, ::-1], x_test[:, ::-1]
 if config.GPU:
     print("config.GPU:", config.GPU)
     x_train = to_gpu(x_train)
-    x_test = to_gpu(x_test)
     t_train = to_gpu(t_train)
-    t_test = to_gpu(t_test)
+    x_test = to_gpu(x_test[:300])
+    t_test = to_gpu(t_test[:300])
+
 
 # ハイパーパラメータの設定
 vocab_size = len(char_to_id)
 wordvec_size = 16
 hidden_size = 256
+# 2020.01.03 ishida
 batch_size = 256
-max_epoch = 4
+# 2020.01.03 ishida
+max_epoch = 8
 max_grad = 5.0
 
 model = AttentionSeq2seq(vocab_size, wordvec_size, hidden_size)
