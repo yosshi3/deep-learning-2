@@ -4,10 +4,8 @@ sys.path.append('..')
 import os
 import numpy
 
-
 id_to_char = {}
 char_to_id = {}
-
 
 def _update_vocab(txt):
     chars = list(txt)
@@ -18,18 +16,31 @@ def _update_vocab(txt):
             char_to_id[char] = tmp_id
             id_to_char[tmp_id] = char
 
+# 2020.01.12 ishida
+def set_vocab(char2id={}):
+    for char in char2id.keys():
+        _update_vocab(char)
 
-def load_data(file_name='addition.txt', seed=1984):
-    file_path = os.path.dirname(os.path.abspath(__file__)) + '/' + file_name
+# 2020.01.03 ishida
+#def load_data(file_name='addition.txt', seed=1984):
+def load_data(file_name='addition.txt', seed=1984, 
+              sep='_', file_path=None, sprit_ratio=10):
+    
+    if file_path == None:
+        file_path = os.path.dirname(os.path.abspath(__file__)) + '/' + file_name
+    else:
+        file_path = file_path + '/' + file_name
 
     if not os.path.exists(file_path):
-        print('No file: %s' % file_name)
+        print('No file: %s' % file_path)
         return None
 
     questions, answers = [], []
 
-    for line in open(file_path, 'r'):
-        idx = line.find('_')
+    # 2020.01.03 ishida
+    #for line in open(file_path, 'r'):
+    for line in open(file_path, 'r', encoding="utf-8"):
+        idx = line.find(sep)
         questions.append(line[:idx])
         answers.append(line[idx:-1])
 
@@ -57,7 +68,7 @@ def load_data(file_name='addition.txt', seed=1984):
     t = t[indices]
 
     # 10% for validation set
-    split_at = len(x) - len(x) // 10
+    split_at = len(x) - len(x) // sprit_ratio
     (x_train, x_test) = x[:split_at], x[split_at:]
     (t_train, t_test) = t[:split_at], t[split_at:]
 

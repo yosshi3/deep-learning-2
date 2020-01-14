@@ -49,7 +49,7 @@ class Trainer:
                 if (eval_interval is not None) and (iters % eval_interval) == 0:
                     avg_loss = total_loss / loss_count
                     elapsed_time = time.time() - start_time
-                    print('| epoch %d |  iter %d / %d | time %d[s] | loss %.2f'
+                    print('| epoch %d |  iter %d / %d | time %d[s] | loss %.5f'
                           % (self.current_epoch + 1, iters + 1, max_iters, elapsed_time, avg_loss))
                     self.loss_list.append(float(avg_loss))
                     total_loss, loss_count = 0, 0
